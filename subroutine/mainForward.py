@@ -68,6 +68,7 @@ class WindowForward(QMainWindow):
         lb_grid             = QLabel('Grid size')
         lb_niter            = QLabel('Iteration')
         lb_cacah            = QLabel('Segment')
+        lb_noiseData        = QLabel('Noise')
         lb_resolution       = QLabel('Split Resolution')
         self.lb_path_model  = QLineEdit()
         self.lb_path_model.setPlaceholderText('path of velocity model')
@@ -84,6 +85,7 @@ class WindowForward(QMainWindow):
         self.ny             = QLineEdit()
         self.nz             = QLineEdit()
         self.gridsize       = QLineEdit()
+        self.noiseData      = QLineEdit()
         self.split_resolution = QLineEdit()
 
         fboxMeth = QFormLayout()
@@ -103,6 +105,7 @@ class WindowForward(QMainWindow):
         fboxMeth.addRow(lb_param)
         fboxMeth.addRow(lb_niter, self.niter)
         fboxMeth.addRow(lb_cacah, self.cacah)
+        fboxMeth.addRow(lb_noiseData, self.noiseData)
         fboxMeth.addRow(lb_resolution, self.split_resolution)
         fboxMeth.addRow(self.bt_dataout, self.lb_path_outdata)
         fboxMeth.addRow(separator, self.bt_execute)
@@ -237,7 +240,7 @@ class WindowForward(QMainWindow):
       path = os.path.join(str(self.pathOutData) + '/result.forward')
       file = open(os.path.join(path), 'w')
       file.write('No \t' + 'XS \t' + 'YS \t' + 'ZS\t' 
-                  + 'XS \t' + 'YS\t' + 'ZS \t' + 'Time(s) \n')
+                  + 'XS \t' + 'YS\t' + 'ZS \t' + 'Time Origin(s) \t' + 'Time Noisy(s) \n')
       no = 0
       print(' error line 242')
       for i in range(len(self.xevent)):
@@ -249,9 +252,11 @@ class WindowForward(QMainWindow):
           xr = self.xstation[j]
           yr = self.ystation[j]
           zr = 0
+          noise = float(self.noiseData.text())
+          timeNoisy = time_ray[no] + np.random.uniform(-1*noise, noise)
 
           file.write(str(no) +'\t' + str(xs) + '\t' + str(ys) + '\t' + str(zs)
-                      + str(xr) + '\t' + str(yr) + '\t' + str(zr) + '\t' + '%0.4f' %(time_ray[no]) + '\n')
+                      + '\t' + str(xr) + '\t' + str(yr) + '\t' + str(zr) + '\t' + '%0.3f' %(time_ray[no]) + '\t' + '%0.3f' %(timeNoisy) +'\n')
         
           no+=1
       

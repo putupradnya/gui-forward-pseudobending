@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
         self.information_window()
 
     def information_window(self):
-        self.name_program = "3D Seismology Data"
+        self.name_program = "Generated 3D Pseudobending"
         self.setWindowTitle(self.name_program)
         p = self.palette()
         p.setColor(self.backgroundRole(), Qt.white)
